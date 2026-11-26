@@ -1,0 +1,6 @@
+/firmware/.pio/
+__pycache__/
+/.venv/
+/dist/
+/AGENTS.md
+.DS_Store

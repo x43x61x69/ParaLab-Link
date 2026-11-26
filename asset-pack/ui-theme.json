@@ -1,0 +1,32 @@
+{
+  "source": "/Users/anon/Git/MY-TH-Controller/resources/theme.json",
+  "edition": "gavv",
+  "mode": "dark",
+  "dark": {
+    "marker": "c792ff",
+    "ink": "f7eefc",
+    "muted": "bfa9cf",
+    "accent": "ff5cc8",
+    "line": "45304f",
+    "paper": "160d1d",
+    "card": "221429",
+    "connection": "2e1b38",
+    "subtle": "2e1b38",
+    "selection": "3d1f50",
+    "selected-line": "c792ff",
+    "preview": "0e0713",
+    "action-text": "2a1838",
+    "success": "4ade80",
+    "brand-pink": "ff7ad6",
+    "danger": "f87171"
+  },
+  "candy": [
+    "a24bf0",
+    "ff5cc8",
+    "ffe23d",
+    "3fd95a",
+    "2ec5f2",
+    "ff9a3c"
+  ],
+  "source_sha256": "c47e004a43885db99705f464680c7edc22835184e9fe0ac22770b0ed96e2137c"
+}
