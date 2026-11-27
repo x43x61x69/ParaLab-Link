@@ -2,7 +2,7 @@
 
 ParaLink is a handheld companion and USB–UART bridge for **Tamagotchi Paradise**. Use a touchscreen or two buttons to browse and send items, look up Lab Codes, and start Playdates. Connect the board to a computer to use it with tools that support USB serial.
 
-**Version 0.1.15** · [Quick start](#quick-start) · [Features](#features) · [Wiring](#wiring) · [Build and flash](#build-and-flash) · [Source layout](#source-layout) · [Credits and licensing](#credits-and-licensing)
+**Version 0.1.16** · [Quick start](#quick-start) · [Features](#features) · [Wiring](#wiring) · [Build and flash](#build-and-flash) · [Source layout](#source-layout) · [Credits and licensing](#credits-and-licensing)
 
 ## Quick start
 
@@ -12,6 +12,8 @@ ParaLink is a handheld companion and USB–UART bridge for **Tamagotchi Paradise
 | **K191** | LILYGO T-QT Pro N8, 8 MiB flash, 128 × 128 LCD | A (GPIO0) and B (GPIO47) |
 
 Select the matching build before the first installation. The USB name is **ParaLink** followed by the last four hexadecimal digits of the board’s factory MAC. The same suffix appears next to the version in the title bar.
+
+When you plug in ParaLink, Chrome can show a USB notification. Click it to open [ParaLab’s Device page](https://x43x61x69.github.io/ParaLab/#device), then use the page’s USB connection controls.
 
 ## Features
 
@@ -91,7 +93,7 @@ The full image contains the bootloader, partition table, firmware, asset pack, a
 
 ```sh
 python -m esptool --chip esp32s3 --port "$LINK_PORT" --baud 460800 \
-  --after watchdog_reset write_flash 0x0 dist/paralink-h717-0.1.15-factory.bin
+  --after watchdog_reset write_flash 0x0 dist/paralink-h717-0.1.16-factory.bin
 ```
 
 ### Update an installed device
@@ -108,7 +110,7 @@ With both boards connected, pass `--port` with the port whose USB name matches t
 python tools/flash_firmware.py --board k191 --boot-port "$LINK_PORT" --with-assets
 ```
 
-For a first installation on K191, use `dist/paralink-k191-0.1.15-factory.bin` in the esptool command above. The ROM loader shows progress on the computer.
+For a first installation on K191, use `dist/paralink-k191-0.1.16-factory.bin` in the esptool command above. The ROM loader shows progress on the computer.
 
 ## Source layout
 

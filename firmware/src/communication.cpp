@@ -212,6 +212,7 @@ void communicationUsbBegin() {
     // Keep the Arduino TinyUSB PID distinct from the ROM USB Serial/JTAG PID.
     USB.PID(0x0002);
     USB.productName(product::name);
+    USB.usbVersion(0x0210); // Advertise BOS support for the WebUSB landing page.
     if (tinyusb_enable_interface(USB_INTERFACE_CDC, TUD_CDC_DESC_LEN, loadBridgeCdcDescriptor) != ESP_OK) {
         statusMessage("USB bridge unavailable");
         return;
