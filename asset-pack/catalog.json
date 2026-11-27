@@ -3757,7 +3757,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": "Exists"
+    "code": "54638572"
   },
   {
     "kind": "gifts",
@@ -4333,7 +4333,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": "Exists"
+    "code": "12926847"
   },
   {
     "kind": "gifts",
@@ -5117,7 +5117,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": "Exists"
+    "code": "64107201"
   },
   {
     "kind": "gifts",
@@ -5133,7 +5133,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": "Exists"
+    "code": "47058763"
   },
   {
     "kind": "gifts",
@@ -5149,7 +5149,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": "Exists"
+    "code": "29674697"
   },
   {
     "kind": "gifts",
@@ -5165,7 +5165,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": "Exists"
+    "code": "76048379"
   },
   {
     "kind": "gifts",
@@ -5181,7 +5181,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": "Exists"
+    "code": "04015149"
   },
   {
     "kind": "gifts",
@@ -5197,7 +5197,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": "Exists"
+    "code": "45619639"
   },
   {
     "kind": "lab",
@@ -8909,7 +8909,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": ""
+    "code": "09508651"
   },
   {
     "kind": "gifts",
@@ -8941,7 +8941,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": ""
+    "code": "29671239"
   },
   {
     "kind": "gifts",
@@ -9165,7 +9165,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": ""
+    "code": "21368731"
   },
   {
     "kind": "gifts",
@@ -9405,7 +9405,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": ""
+    "code": "81598342"
   },
   {
     "kind": "gifts",
@@ -9421,7 +9421,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": ""
+    "code": "95851016"
   },
   {
     "kind": "gifts",
@@ -9437,7 +9437,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": ""
+    "code": "15207495"
   },
   {
     "kind": "gifts",
@@ -9453,7 +9453,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": ""
+    "code": "28264385"
   },
   {
     "kind": "gifts",
@@ -9469,7 +9469,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": ""
+    "code": "99274315"
   },
   {
     "kind": "gifts",
@@ -9485,7 +9485,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": ""
+    "code": "73286167"
   },
   {
     "kind": "gifts",
@@ -9501,7 +9501,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": ""
+    "code": "10291897"
   },
   {
     "kind": "gifts",
@@ -9517,7 +9517,7 @@
     "size": 0,
     "uid": 0,
     "char_uid": 0,
-    "code": ""
+    "code": "26149850"
   },
   {
     "kind": "ghosts",
@@ -12082,6 +12082,762 @@
       "it": "VISIERA MAMETCHI TROPICALE",
       "zh-Hans": "南方豆丁吉可爱头环",
       "ko": "남국마메치 선 캡"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4076,
+    "name": "Tigaotchi",
+    "original_name": "Tigaotchi",
+    "category": 5,
+    "field": 0,
+    "image": 4487,
+    "atlas": 511,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "35LPY0WX",
+    "native_names": {
+      "en": "Tigaotchi",
+      "fr": "TIGAOTCHI",
+      "es": "TIGAOTCHI",
+      "de": "TIGAOTCHI",
+      "pt": "TIGAOTCHI",
+      "it": "TIGAOTCHI",
+      "ja": "たいがおっち",
+      "zh-Hans": "老虎吉",
+      "ko": "타이가오치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4078,
+    "name": "Lessapantchi",
+    "original_name": "Lessapantchi",
+    "category": 5,
+    "field": 0,
+    "image": 2738,
+    "atlas": 458,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "9EBAMVF8",
+    "native_names": {
+      "en": "Lessapantchi",
+      "fr": "LESSAPANTCHI",
+      "es": "LESSAPANTCHI",
+      "de": "LESSAPANTCHI",
+      "pt": "LESSAPANTCHI",
+      "it": "LESSAPANTCHI",
+      "ja": "れさぱんっち",
+      "zh-Hans": "小熊猫吉",
+      "ko": "레서판치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4079,
+    "name": "Kanokotchi",
+    "original_name": "Kanokotchi",
+    "category": 5,
+    "field": 0,
+    "image": 2309,
+    "atlas": 445,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "4Y8ECKXP",
+    "native_names": {
+      "en": "Kanokotchi",
+      "fr": "KANOKOTCHI",
+      "es": "KANOKOTCHI",
+      "de": "KANOKOTCHI",
+      "pt": "KANOKOTCHI",
+      "it": "KANOKOTCHI",
+      "ja": "かのこっち",
+      "zh-Hans": "小鹿吉",
+      "ko": "카노코치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4082,
+    "name": "Kachitchi",
+    "original_name": "Kachitchi",
+    "category": 5,
+    "field": 0,
+    "image": 2243,
+    "atlas": 443,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "T97YQ3U5",
+    "native_names": {
+      "en": "Kachitchi",
+      "fr": "KACHITCHI",
+      "es": "KACHITCHI",
+      "de": "KACHITCHI",
+      "pt": "KACHITCHI",
+      "it": "KACHITCHI",
+      "ja": "かちっち",
+      "zh-Hans": "鹊鹊吉",
+      "ko": "까치치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4083,
+    "name": "Tokipatchi",
+    "original_name": "Tokipatchi",
+    "category": 5,
+    "field": 0,
+    "image": 4553,
+    "atlas": 513,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "02UXR90S",
+    "native_names": {
+      "en": "Tokipatchi",
+      "fr": "TOKIPATCHI",
+      "es": "TOKIPATCHI",
+      "de": "TOKIPATCHI",
+      "pt": "TOKIPATCHI",
+      "it": "TOKIPATCHI",
+      "ja": "ときぱっち",
+      "zh-Hans": "朱鹭吉",
+      "ko": "토키파치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4086,
+    "name": "Shiitaketchi",
+    "original_name": "Shiitaketchi",
+    "category": 5,
+    "field": 0,
+    "image": 4058,
+    "atlas": 498,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "E1F79X8P",
+    "native_names": {
+      "en": "Shiitaketchi",
+      "fr": "SHIITAKETCHI",
+      "es": "SHIITAKETCHI",
+      "de": "SHIITAKETCHI",
+      "pt": "SHIITAKETCHI",
+      "it": "SHIITAKETCHI",
+      "ja": "しいたけっち",
+      "zh-Hans": "香菇吉",
+      "ko": "시이타케치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4096,
+    "name": "Tropical Meowtchi",
+    "original_name": "Tropical Meowtchi",
+    "category": 5,
+    "field": 0,
+    "image": 4751,
+    "atlas": 519,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "4AEX49V8",
+    "native_names": {
+      "en": "Tropical Meowtchi",
+      "fr": "MEOWTCHI",
+      "es": "MEOWTCHI",
+      "de": "MEOWTCHI",
+      "pt": "MEOWTCHI",
+      "it": "MEOWTCHI",
+      "ja": "なんごくみゃおっち",
+      "zh-Hans": "南方猫猫吉",
+      "ko": "남국 미야오치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4097,
+    "name": "Madillotchi",
+    "original_name": "Madillotchi",
+    "category": 5,
+    "field": 0,
+    "image": 2804,
+    "atlas": 460,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "3MTWNK6X",
+    "native_names": {
+      "en": "Madillotchi",
+      "fr": "MADILLOTCHI",
+      "es": "MADILLOTCHI",
+      "de": "MADILLOTCHI",
+      "pt": "MADILLOTCHI",
+      "it": "MADILLOTCHI",
+      "ja": "まじろっち",
+      "zh-Hans": "犰狳吉",
+      "ko": "마지로치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4101,
+    "name": "Tropical Parorotchi",
+    "original_name": "Parorotchi",
+    "category": 5,
+    "field": 0,
+    "image": 4784,
+    "atlas": 520,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "WN9Q7X85",
+    "native_names": {
+      "en": "Parorotchi",
+      "fr": "PAROROTCHI",
+      "es": "PAROROTCHI",
+      "de": "PAROROTCHI",
+      "pt": "PAROROTCHI",
+      "it": "PAROROTCHI",
+      "ja": "ぱろろっち",
+      "zh-Hans": "鹦鹉吉",
+      "ko": "파로로치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4105,
+    "name": "Tropical Poizutchi",
+    "original_name": "Poizutchi",
+    "category": 5,
+    "field": 0,
+    "image": 4817,
+    "atlas": 521,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "2WBRUA3H",
+    "native_names": {
+      "en": "Poizutchi",
+      "fr": "POIZUTCHI",
+      "es": "POIZUTCHI",
+      "de": "POIZUTCHI",
+      "pt": "POIZUTCHI",
+      "it": "POIZUTCHI",
+      "ja": "ぽいずっち",
+      "zh-Hans": "箭蛙吉",
+      "ko": "포이즈치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4108,
+    "name": "Yashikitchi",
+    "original_name": "Yashikitchi",
+    "category": 5,
+    "field": 0,
+    "image": 5114,
+    "atlas": 530,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "KT31XBG1",
+    "native_names": {
+      "en": "Yashikitchi",
+      "fr": "YASHIKITCHI",
+      "es": "YASHIKITCHI",
+      "de": "YASHIKITCHI",
+      "pt": "YASHIKITCHI",
+      "it": "YASHIKITCHI",
+      "ja": "やしきっち",
+      "zh-Hans": "椰树吉",
+      "ko": "야시키치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4109,
+    "name": "Tropical Potsunentchi",
+    "original_name": "Tropical Potsunentchi",
+    "category": 5,
+    "field": 0,
+    "image": 4850,
+    "atlas": 522,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "0Y1G7G66",
+    "native_names": {
+      "en": "Tropical Potsunentchi",
+      "fr": "POTSUNENTCHI",
+      "es": "POTSUNENTCHI",
+      "de": "POTSUNENTCHI",
+      "pt": "POTSUNENTCHI",
+      "it": "POTSUNENTCHI",
+      "ja": "なんごくぽつねんっち",
+      "zh-Hans": "南方一朵吉",
+      "ko": "남국 포츠넨치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4119,
+    "name": "Okojotchi",
+    "original_name": "Okojotchi",
+    "category": 5,
+    "field": 0,
+    "image": 3266,
+    "atlas": 474,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "V5A0EP28",
+    "native_names": {
+      "en": "Okojotchi",
+      "fr": "OKOJOTCHI",
+      "es": "OKOJOTCHI",
+      "de": "OKOJOTCHI",
+      "pt": "OKOJOTCHI",
+      "it": "OKOJOTCHI",
+      "ja": "おこじょっち",
+      "zh-Hans": "雪貂吉",
+      "ko": "오코죠치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4122,
+    "name": "Icy Irukatchi",
+    "original_name": "Icy Irukatchi",
+    "category": 5,
+    "field": 0,
+    "image": 2045,
+    "atlas": 437,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "TF8C4XG3",
+    "native_names": {
+      "en": "Icy Irukatchi",
+      "fr": "IRUKATCHI",
+      "es": "IRUKATCHI",
+      "de": "IRUKATCHI",
+      "pt": "IRUKATCHI",
+      "it": "IRUKATCHI",
+      "ja": "シロいるかっち",
+      "zh-Hans": "白海豚吉",
+      "ko": "시로이루카치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4123,
+    "name": "Ginjirotchi",
+    "original_name": "Ginjirotchi",
+    "category": 5,
+    "field": 0,
+    "image": 1583,
+    "atlas": 423,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "HCF8K432",
+    "native_names": {
+      "en": "Ginjirotchi",
+      "fr": "GINJIROTCHI",
+      "es": "GINJIROTCHI",
+      "de": "GINJIROTCHI",
+      "pt": "GINJIROTCHI",
+      "it": "GINJIROTCHI",
+      "ja": "ぎんじろっち",
+      "zh-Hans": "银次郎吉",
+      "ko": "긴지로치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4125,
+    "name": "Rakkotchi",
+    "original_name": "Rakkotchi",
+    "category": 5,
+    "field": 0,
+    "image": 3761,
+    "atlas": 489,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "1HUNV49V",
+    "native_names": {
+      "en": "Rakkotchi",
+      "fr": "RAKKOTCHI",
+      "es": "RAKKOTCHI",
+      "de": "RAKKOTCHI",
+      "pt": "RAKKOTCHI",
+      "it": "RAKKOTCHI",
+      "ja": "らっこっち",
+      "zh-Hans": "海獭吉",
+      "ko": "랏코치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4126,
+    "name": "Moosetchi",
+    "original_name": "Moosetchi",
+    "category": 5,
+    "field": 0,
+    "image": 3134,
+    "atlas": 470,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "4NEYYB0B",
+    "native_names": {
+      "en": "Moosetchi",
+      "fr": "MOOSETCHI",
+      "es": "MOOSETCHI",
+      "de": "MOOSETCHI",
+      "pt": "MOOSETCHI",
+      "it": "MOOSETCHI",
+      "ja": "ムースっち",
+      "zh-Hans": "驼鹿吉",
+      "ko": "무스치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4130,
+    "name": "Nerinetchi",
+    "original_name": "Nerinetchi",
+    "category": 5,
+    "field": 0,
+    "image": 3233,
+    "atlas": 473,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "PA9E4NAQ",
+    "native_names": {
+      "en": "Nerinetchi",
+      "fr": "NERINETCHI",
+      "es": "NERINETCHI",
+      "de": "NERINETCHI",
+      "pt": "NERINETCHI",
+      "it": "NERINETCHI",
+      "ja": "ネリネっち",
+      "zh-Hans": "海天使吉",
+      "ko": "네리네치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4140,
+    "name": "銀河吉",
+    "original_name": "Cosmitchi",
+    "category": 5,
+    "field": 0,
+    "image": 5508,
+    "atlas": 600,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "CCU056KH",
+    "native_names": {
+      "en": "Cosmitchi",
+      "fr": "COSMITCHI",
+      "es": "COSMITCHI",
+      "de": "COSMITCHI",
+      "pt": "COSMITCHI",
+      "it": "COSMITCHI",
+      "ja": "コズミっち",
+      "zh-Hans": "银河吉",
+      "ko": "코즈미치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4141,
+    "name": "守星吉",
+    "original_name": "Hoshimortchi",
+    "category": 5,
+    "field": 0,
+    "image": 5541,
+    "atlas": 601,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "52GSVBYQ",
+    "native_names": {
+      "en": "Hoshimortchi",
+      "fr": "HOSHIMORTCHI",
+      "es": "HOSHIMORTCHI",
+      "de": "HOSHIMORTCHI",
+      "pt": "HOSHIMORTCHI",
+      "it": "HOSHIMORTCHI",
+      "ja": "ほしもりっち",
+      "zh-Hans": "守星吉",
+      "ko": "호시모리치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4144,
+    "name": "星嘻嘻吉",
+    "original_name": "Ukiukitchi",
+    "category": 5,
+    "field": 0,
+    "image": 5640,
+    "atlas": 604,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "K0T76S7W",
+    "native_names": {
+      "en": "Ukiukitchi",
+      "fr": "UKIUKITCHI",
+      "es": "UKIUKITCHI",
+      "de": "UKIUKITCHI",
+      "pt": "UKIUKITCHI",
+      "it": "UKIUKITCHI",
+      "ja": "ウキウキっち",
+      "zh-Hans": "星嘻嘻吉",
+      "ko": "우키우키치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4145,
+    "name": "星波吉",
+    "original_name": "Pochipotchi",
+    "category": 5,
+    "field": 0,
+    "image": 5673,
+    "atlas": 605,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "N1KAK9WM",
+    "native_names": {
+      "en": "Pochipotchi",
+      "fr": "POCHIPOTCHI",
+      "es": "POCHIPOTCHI",
+      "de": "POCHIPOTCHI",
+      "pt": "POCHIPOTCHI",
+      "it": "POCHIPOTCHI",
+      "ja": "ポチポチっち",
+      "zh-Hans": "星波吉",
+      "ko": "포치포치치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4149,
+    "name": "流星吉",
+    "original_name": "Nagarebotchi",
+    "category": 5,
+    "field": 0,
+    "image": 5805,
+    "atlas": 609,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "XT4EM76L",
+    "native_names": {
+      "en": "Nagarebotchi",
+      "fr": "NAGAREBOTCHI",
+      "es": "NAGAREBOTCHI",
+      "de": "NAGAREBOTCHI",
+      "pt": "NAGAREBOTCHI",
+      "it": "NAGAREBOTCHI",
+      "ja": "ながれぼっち",
+      "zh-Hans": "流星吉",
+      "ko": "나가레보치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4152,
+    "name": "機器豆丁吉",
+    "original_name": "Mamerobotchi",
+    "category": 5,
+    "field": 0,
+    "image": 5904,
+    "atlas": 612,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "R15YCM3B",
+    "native_names": {
+      "en": "Mamerobotchi",
+      "fr": "MAMEROBOTCHI",
+      "es": "MAMEROBOTCHI",
+      "de": "MAMEROBOTCHI",
+      "pt": "MAMEROBOTCHI",
+      "it": "MAMEROBOTCHI",
+      "ja": "まめロボっち",
+      "zh-Hans": "机器豆丁吉",
+      "ko": "마메로보치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4183,
+    "name": "玫玫吉",
+    "original_name": "Memetchi",
+    "category": 5,
+    "field": 0,
+    "image": 7554,
+    "atlas": 662,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "YDVCYU37",
+    "native_names": {
+      "en": "Memetchi",
+      "fr": "MEMETCHI",
+      "es": "MEMETCHI",
+      "de": "MEMETCHI",
+      "pt": "MEMETCHI",
+      "it": "MEMETCHI",
+      "ja": "めめっち",
+      "zh-Hans": "玫玫吉",
+      "ko": "메메치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4187,
+    "name": "甜心吉",
+    "original_name": "Lovelitchi",
+    "category": 5,
+    "field": 0,
+    "image": 7686,
+    "atlas": 666,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "XGNEM8PH",
+    "native_names": {
+      "en": "Lovelitchi",
+      "fr": "LOVELITCHI",
+      "es": "LOVELITCHI",
+      "de": "LOVELITCHI",
+      "pt": "LOVELITCHI",
+      "it": "LOVELITCHI",
+      "ja": "ラブリっち",
+      "zh-Hans": "甜心吉",
+      "ko": "러블리치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4188,
+    "name": "旋律吉",
+    "original_name": "Melodytchi",
+    "category": 5,
+    "field": 0,
+    "image": 7719,
+    "atlas": 667,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "R3TKW5H5",
+    "native_names": {
+      "en": "Melodytchi",
+      "fr": "MELODYTCHI",
+      "es": "MELODYTCHI",
+      "de": "MELODYTCHI",
+      "pt": "MELODYTCHI",
+      "it": "MELODYTCHI",
+      "ja": "メロディっち",
+      "zh-Hans": "旋律吉",
+      "ko": "멜로디치"
+    }
+  },
+  {
+    "kind": "codes",
+    "id": 4190,
+    "name": "黑豆吉",
+    "original_name": "Kuromametchi",
+    "category": 5,
+    "field": 0,
+    "image": 7785,
+    "atlas": 669,
+    "data": 0,
+    "blocks": 0,
+    "size": 0,
+    "uid": 0,
+    "char_uid": 0,
+    "code": "6LWVAJQF",
+    "native_names": {
+      "en": "Kuromametchi",
+      "fr": "KUROMAMETCHI",
+      "es": "KUROMAMETCHI",
+      "de": "KUROMAMETCHI",
+      "pt": "KUROMAMETCHI",
+      "it": "KUROMAMETCHI",
+      "ja": "くろまめっち",
+      "zh-Hans": "黑豆吉",
+      "ko": "쿠로마메치"
     }
   }
 ]

@@ -191,6 +191,10 @@ void render(uint32_t now) {
             text(itemName(page.item),49,31,76,INK,3);
             if(catalog::favorite(favorites,page.item))small("* Saved",4,78,ACCENT);
             if(item.kind==3)text(item.code,4,91,120,YELLOW);
+            else if(item.kind==0&&item.code[0]){
+                char code[20];snprintf(code,sizeof(code),"Shop Code %s",item.code);
+                small(code,4,98,YELLOW);
+            }
             else if(item.kind==1||item.kind==4)small("Buy 0 / Sell 9999 G",4,98,YELLOW);
             else small(item.kind==2?worlds[item.field]:"Gift",4,98);
             break;

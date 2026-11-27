@@ -374,6 +374,10 @@ void detail() {
         text("Enter in Research Records", 200, 201, 204, MUTED);
     } else {
         if (item.kind == 1 || item.kind == 4) text("Buy 0 G / Sell 9999 G", 200, 159, 204, YELLOW);
+        else if (item.kind == 0 && item.code[0]) {
+            snprintf(label, sizeof(label), "Shop Code %s", item.code);
+            text(label, 200, 159, 204, YELLOW);
+        }
         else text(item.kind == 2 ? worldChoices[item.field] : label, 200, 159, 204, CYAN);
         text(tamaMode(item), 200, 201, 204, MUTED);
         button(detailContinue, "Continue", status.busy || !status.assetOK ? Action::None : Action::Confirm, true);

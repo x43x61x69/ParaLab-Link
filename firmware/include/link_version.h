@@ -1,6 +1,6 @@
 #pragma once
 
-#define PARALINK_VERSION "0.1.17"
+#define PARALINK_VERSION "0.1.18"
 
 #ifdef PARALINK_K191
 #define PARALINK_HARDWARE "K191"

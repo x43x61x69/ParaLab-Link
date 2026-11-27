@@ -2,7 +2,7 @@
 
 ParaLink is a handheld companion and USB–UART bridge for **Tamagotchi Paradise**. Use a touchscreen or two buttons to browse and send items, look up Lab Codes, and start Playdates. Connect the board to a computer to use it with tools that support USB serial.
 
-**Version 0.1.17** · [Quick start](#quick-start) · [Features](#features) · [Wiring](#wiring) · [Build and flash](#build-and-flash) · [Source layout](#source-layout) · [Credits and licensing](#credits-and-licensing)
+**Version 0.1.18** · [Quick start](#quick-start) · [Features](#features) · [Wiring](#wiring) · [Build and flash](#build-and-flash) · [Source layout](#source-layout) · [Credits and licensing](#credits-and-licensing)
 
 ## Quick start
 
@@ -19,10 +19,10 @@ When you plug in ParaLink, Chrome can show a USB notification. Click it to open 
 
 | Feature | How to use it |
 | --- | --- |
-| **Gifts** | Choose a gift and tap **Send Gift** on ParaLink. On Paradise, open **Connect → Gift** and press **B**. The receiving ROM must support the item. |
+| **Gifts** | Choose a gift and tap **Send Gift** on ParaLink. On Paradise, open **Connect → Gift** and press **B**. The receiving ROM must support the item. The gift details show its Shop Code when available. |
 | **Lab Items · Coins** | Send any of the 67 bundled Lab Items or a Money Boost. First open **Connect → Download** on Paradise. |
 | **Playdates** | Choose a character by world, including 86 visitors from **Neon Planets**. Start a Playdate on Paradise and follow the prompts on both devices. |
-| **Lab Codes** | Look up Lab Codes and enter them in the research records on Paradise. |
+| **Lab Codes** | Look up 39 Lab Sticker Codes in **Lab Codes**. Enter them under **Lab Log → Microscope → Lab Code** on Paradise. |
 | **USB Bridge · Link Test** | View USB and UART traffic, replay the most recently captured segment, or test the UART connection. |
 | **Favorites · Last Item** | Open your favorites or the last item sent successfully. Favorites are stored in nonvolatile storage. The last-item entry clears on restart. |
 | **Settings** | Adjust brightness, rotate the screen and touch orientation, choose an item-name language, or view device information. |
@@ -93,7 +93,7 @@ The full image contains the bootloader, partition table, firmware, asset pack, a
 
 ```sh
 python -m esptool --chip esp32s3 --port "$LINK_PORT" --baud 460800 \
-  --after watchdog_reset write_flash 0x0 dist/paralink-h717-0.1.17-factory.bin
+  --after watchdog_reset write_flash 0x0 dist/paralink-h717-0.1.18-factory.bin
 ```
 
 ### Update an installed device
@@ -110,7 +110,7 @@ With both boards connected, pass `--port` with the port whose USB name matches t
 python tools/flash_firmware.py --board k191 --boot-port "$LINK_PORT" --with-assets
 ```
 
-For a first installation on K191, use `dist/paralink-k191-0.1.17-factory.bin` in the esptool command above. The ROM loader shows progress on the computer.
+For a first installation on K191, use `dist/paralink-k191-0.1.18-factory.bin` in the esptool command above. The ROM loader shows progress on the computer.
 
 ## Source layout
 
@@ -134,6 +134,8 @@ python tools/build_fonts.py /path/to/fonts
 ```
 
 The font directory must contain `AtkinsonHyperlegible-Regular.ttf`, `AtkinsonHyperlegible-Bold.ttf`, `NotoSansCJKtc-Medium.otf`, and `NotoEmoji-Regular.ttf`. To reimport item names, first run `node tools/import_item_names.cjs /path/to/ParaLab /path/to/rom-dumps`. Standard builds can use the included item names and glyph tables.
+
+To sync Lab Sticker and Shop Codes, run `node tools/import_codes.cjs /path/to/ParaLab`, then regenerate the catalog and item name headers.
 
 To import new Lab Item IDs, first run `node tools/import_lab_items.cjs /path/to/ParaLab`. To rebuild the visitor assets from your own Neon Planets ROM, run `node tools/import_neon_visitors.cjs /path/to/ParaLab /path/to/neon-rom.bin`. Then reimport the item names and run the three generation commands above. Install the rebuilt asset pack with `--with-assets`.
 
