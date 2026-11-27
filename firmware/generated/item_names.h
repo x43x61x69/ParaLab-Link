@@ -700,6 +700,15 @@ constexpr const char* catalogNames[][languageCount] = {
     {"OMARUTCHI", "OMARUTCHI", "OMARUTCHI", "OMARUTCHI", "OMARUTCHI", "OMARUTCHI", "おまるっち", "便桶吉", "오마루치", "便桶吉"},
     {"POOPTCHI", "POOPTCHI", "POOPTCHI", "POOPTCHI", "POOPTCHI", "POOPTCHI", "ぷーぷっち", "便便吉", "뿌뿌치", "便便吉"},
     {"SHYKUTCHI", "SHYKUTCHI", "SHYKUTCHI", "SHYKUTCHI", "SHYKUTCHI", "SHYKUTCHI", "シャイクっち", "鲨鲨吉", "샤이크치", "鯊鯊吉"},
+    {"CLAY FIGURE", "FIGURINE EN ARGILE", "FIGURA", "TONFIGUR", "ARGILA", "STATUETTA IN ARGILLA", "めめどぐう", "泥偶", "점토 인형", "泥偶"},
+    {"DISPLAY CASE", "PRÉSENTOIR", "EXPOSITOR", "DISPLAY-SOCKEL", "BASE DE EXIBIÇÃO", "BASE ESPOSITIVA", "てんじだい", "展示台", "전시대", "展示臺"},
+    {"HOMEMADE WATERFALL", "CASCADE FAITE MAISON", "CASCADA CASERA", "SELBSTGEBAUTER WASSERFALL", "CASCATA ARTESANAL", "CASCATA FATTA A MANO", "てづくりのたき", "手工瀑布", "수제 폭포", "手工瀑布"},
+    {"HIGH-GRADE MELON", "MELON PREMIUM", "MELÓN DE CALIDAD", "PREMIUM-MELONE", "MELÃO MADURO", "MELONE PREGIATO", "こうきゅうメロン", "高级甜瓜", "고급 메론", "高級甜瓜"},
+    {"HORS D’OEUVRE", "HORS-D’ŒUVRE", "APERITIVOS", "VORSPEISENPLATTE", "APERITIVOS", "ANTIPASTI", "オードブル", "冷盘拼盘", "에피타이저", "冷盤拼盤"},
+    {"LUXURY BATH", "BAIN DE LUXE", "BAÑO DE LUJO", "LUXUSBAD", "BANHO DE LUXO", "BAGNO DI LUSSO", "ゴージャスぶろ", "豪华浴缸", "럭셔리 욕조", "豪華浴缸"},
+    {"PRINCESS BED", "LIT DE PRINCESSE", "CAMA DE PRINCESA", "PRINZESSINNEN-BETT", "CAMA DE PRINCESA", "LETTO DA PRINCIPESSA", "プリンセスベッド", "公主床", "프린세스 침대", "公主床"},
+    {"ROYAL DANCE STAGE", "SCÈNE DE DANSE ROYALE", "ESCENARIO DE BAILE REAL", "KÖNIGLICHE TANZBÜHNE", "PALCO DE DANÇA REAL", "SCENA DI BALLO REALE", "ロイヤルダンスステージ", "皇家舞台", "로열 댄스 스테이지", "皇家舞臺"},
+    {"TROPICAL MAMETCHI VISOR", "VISIÈRE MAMETCHI TROPICALE", "VISOR DE MAMETCHI TROPICAL", "TROPISCHER MAMETCHI-SCHIRM", "VISEIRA DE MAMETCHI TROPICAL", "VISIERA MAMETCHI TROPICALE", "なんごくまめっちバイザー", "南方豆丁吉可爱头环", "남국마메치 선 캡", "南方豆丁吉可愛頭環"},
 };
 static_assert(sizeof(catalogNames) / sizeof(catalogNames[0]) == catalogCount, "Name rows must match the catalog");
 } // namespace names

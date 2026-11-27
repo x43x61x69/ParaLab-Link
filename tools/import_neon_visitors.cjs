@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const zlib = require('node:zlib');
+const {thumbnail, writer} = require('./asset_pack.cjs');
 
 const [paralabPath, romPath] = process.argv.slice(2);
 if (!paralabPath || !romPath) {
@@ -30,24 +31,28 @@ const visitors = visit.collectRomVisitors(context, core, {nativeAnimationFallbac
   .sort((a, b) => a.character.field - b.character.field || a.character.id - b.character.id);
 assert.ok(visitors.length && new Set(visitors.map(v => v.character.id)).size === visitors.length);
 
-const oldNeon = catalog.findIndex(item => item.kind === 'ghosts' && item.field === neonWorld);
-const baseBytes = oldNeon < 0 ? oldPack.length : records[catalog[oldNeon].image][0];
-if (oldNeon >= 0) {
-  assert.ok(catalog.slice(oldNeon).every(item => item.kind === 'ghosts' && item.field === neonWorld));
-  records.length = catalog[oldNeon].image;
-  catalog.length = oldNeon;
+const firstNeon = catalog.findIndex(item => item.kind === 'ghosts' && item.field === neonWorld);
+const isNeon = item => item.kind === 'ghosts' && item.field === neonWorld;
+const lastNeon = firstNeon < 0 ? -1 : catalog.findLastIndex(isNeon);
+const trailingItems = lastNeon < 0 ? [] : catalog.slice(lastNeon + 1);
+let trailingRecords = [], trailingRecordStart = records.length;
+let baseBytes = oldPack.length;
+if (firstNeon >= 0) {
+  const oldVisitors = catalog.slice(firstNeon, lastNeon + 1);
+  assert.ok(oldVisitors.every(isNeon), 'Neon visitor range is not contiguous');
+  const last = catalog[lastNeon];
+  trailingRecordStart = last.data + last.blocks;
+  trailingRecords = records.slice(trailingRecordStart);
+  if (trailingItems.length) {
+    // Saved favorites use the original catalog index, including entries added later.
+    assert.deepEqual(visitors.map(({character}) => character.id), oldVisitors.map(item => item.id));
+  }
+  baseBytes = records[catalog[firstNeon].image][0];
+  records.length = catalog[firstNeon].image;
+  catalog.length = firstNeon;
 }
-const chunks = [Buffer.from(oldPack.subarray(0, baseBytes))];
-let packSize = baseBytes;
-
-function append(bytes) {
-  const packed = zlib.deflateSync(bytes, {level: 9});
-  const index = records.length;
-  records.push([packSize, packed.length, bytes.length, zlib.crc32(bytes)]);
-  chunks.push(packed);
-  packSize += packed.length;
-  return index;
-}
+const pack = writer(oldPack.subarray(0, baseBytes), records);
+const {append} = pack;
 
 function portrait(ghost) {
   const view = new DataView(ghost.buffer, ghost.byteOffset, ghost.byteLength);
@@ -83,24 +88,6 @@ function portrait(ghost) {
   return image;
 }
 
-function thumbnail(image) {
-  const rgb565 = (r, g, b) => (r >> 3) << 11 | (g >> 2) << 5 | (b >> 3);
-  const paper = rgb565(...Buffer.from(theme.dark.paper, 'hex'));
-  const scale = Math.min(1, 32 / Math.max(image.w, image.h));
-  const width = Math.max(1, Math.round(image.w * scale)), height = Math.max(1, Math.round(image.h * scale));
-  const x = (32 - width) >> 1, y = (32 - height) >> 1;
-  const tile = Buffer.alloc(2048);
-  for (let offset = 0; offset < tile.length; offset += 2) tile.writeUInt16LE(paper, offset);
-  for (let row = 0; row < height; ++row) for (let col = 0; col < width; ++col) {
-    const offset = (Math.floor(row * image.h / height) * image.w + Math.floor(col * image.w / width)) * 4;
-    if (image.data[offset + 3]) {
-      tile.writeUInt16LE(rgb565(...image.data.subarray(offset, offset + 3)), 2 * ((y + row) * 32 + x + col));
-    }
-  }
-  assert.ok(tile.some((byte, offset) => byte !== tile[offset % 2]), 'Blank Neon visitor thumbnail');
-  return tile;
-}
-
 let atlas = Math.max(...catalog.map(item => item.atlas)) + 1;
 for (const visitor of visitors) {
   const {id, name: textRow} = visitor.character;
@@ -108,7 +95,7 @@ for (const visitor of visitors) {
   const preview = portrait(ghost);
   visit.writeRomGhostPlanet(ghost, preview, core);
   assert.ok(visit.verifyGhost(ghost), `Invalid Neon ghost ${id}`);
-  const image = append(thumbnail(preview));
+  const image = append(thumbnail(preview, theme.dark.paper));
   const data = records.length;
   for (let offset = 0; offset < ghost.length; offset += 4096) append(ghost.subarray(offset, offset + 4096));
   const names = Object.fromEntries(locale.LOCALES.map(([code]) => [code, locale.text(rom, textRow, code, {fallback: false})]));
@@ -120,12 +107,12 @@ for (const visitor of visitors) {
     size: ghost.length, uid: fields.visDeviceUid, char_uid: fields.visCharacterUid, code: '', native_names: names,
   });
 }
-assert.ok(packSize <= 0x480000, 'Asset pack exceeds its flash partition');
-const pack = Buffer.concat(chunks, packSize);
-pack.writeUInt32LE(pack.length, 4);
-pack.writeUInt32LE(records.length, 8);
-pack.writeUInt32LE(zlib.crc32(pack.subarray(16)), 12);
-fs.writeFileSync(path.join(assets, 'assets.bin'), pack);
-fs.writeFileSync(path.join(assets, 'records.json'), JSON.stringify(records) + '\n');
-fs.writeFileSync(path.join(assets, 'catalog.json'), JSON.stringify(catalog, null, 2) + '\n');
-console.log(`Packed ${visitors.length} Neon Planets visitors, ${packSize} asset bytes`);
+const recordOffset = records.length - trailingRecordStart;
+for (const [offset, packed, raw, crc] of trailingRecords)
+  pack.appendPacked(oldPack.subarray(offset, offset + packed), raw, crc);
+for (const item of trailingItems) {
+  if (item.image >= trailingRecordStart) item.image += recordOffset;
+  if (item.blocks && item.data >= trailingRecordStart) item.data += recordOffset;
+  catalog.push(item);
+}
+console.log('Packed ' + visitors.length + ' Neon Planets visitors, ' + pack.save(assets, catalog) + ' asset bytes');
