@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 #include <Wire.h>
+#include <atomic>
 #include <driver/spi_master.h>
 #include <esp_heap_caps.h>
 
@@ -15,6 +16,10 @@ constexpr int stripRows = 8;
 spi_device_handle_t display;
 uint16_t* dmaStrip;
 bool touchReady;
+std::atomic<bool> touchPending{false};
+constexpr uint8_t brightnessLevels[]{0x50, 0xA0, 0xFF};
+
+void IRAM_ATTR notifyTouch() { touchPending.store(true, std::memory_order_relaxed); }
 
 bool transfer(spi_transaction_t& transaction) {
     digitalWrite(cs, LOW);
@@ -99,19 +104,21 @@ bool panel::begin() {
         // Keep register reads available, and report contact, movement and release.
         touchReg(0xFE, 1);
         touchReg(0xFA, 0x60);
+        attachInterrupt(digitalPinToInterrupt(touchIrq), notifyTouch, FALLING);
         touchReady = true;
     }
     return true;
 }
 
 void panel::setBrightness(unsigned level) {
-    constexpr uint8_t levels[]{0x50, 0xA0, 0xFF};
-    if (level < sizeof(levels)) reg(0x51, levels[level]);
+    setDisplayOn(true, level);
 }
 
-bool panel::setDisplayOn(bool on) {
-    return command(on ? 0x29 : 0x28);
+bool panel::setDisplayOn(bool on, unsigned brightness) {
+    return brightness < sizeof(brightnessLevels) && reg(0x51, on ? brightnessLevels[brightness] : 0);
 }
+
+bool panel::takeTouchInterrupt() { return touchPending.exchange(false); }
 
 void panel::present(const uint16_t* pixels, bool rotated) {
     presentRows(pixels, rotated, 0, height);

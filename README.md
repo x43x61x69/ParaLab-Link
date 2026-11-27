@@ -2,7 +2,7 @@
 
 ParaLab Link is a touchscreen companion and USB–UART bridge for **Tamagotchi Paradise**. Use the touchscreen to browse and send items, look up Lab Codes, and start Playdates. Connect the board to a computer to use it with tools that support USB serial.
 
-**Version 0.1.10** · [Quick start](#quick-start) · [Features](#features) · [Wiring](#wiring) · [Build and flash](#build-and-flash) · [Source layout](#source-layout) · [Credits and licensing](#credits-and-licensing)
+**Version 0.1.11** · [Quick start](#quick-start) · [Features](#features) · [Wiring](#wiring) · [Build and flash](#build-and-flash) · [Source layout](#source-layout) · [Credits and licensing](#credits-and-licensing)
 
 ## Quick start
 
@@ -36,14 +36,18 @@ Item names default to **English**. Choose a language in **More → Settings → 
 
 ## Wiring
 
-Use the board’s four-pin **UART** connector.
+Use a USB-C data cable, a four-pin JST-SH 1.0 mm plug with bare leads, and a three-contact Paradise UART adapter.
 
-| ParaLab Link | Tamagotchi Paradise |
+Face the back of the H717 with USB-C at the bottom. Use the four-hole **UART** socket to the right of USB-C and count from left to right. The cable plug is mirrored when viewed from its mating face. Identify each lead by its pin label or continuity. [LILYGO pinout photo](https://cdn.shopify.com/s/files/1/0617/7190/7253/files/T-Display-S3-AMOLED-Touch_1.jpg?v=1736151639)
+
+Open the Paradise top cover and hold the device with its screen facing you and its buttons below the screen. Count the three contacts from left to right. [Paradise contacts photo](https://github.com/GMMan/tama-para-research/blob/master/hardware/prongs.jpg)
+
+| H717 UART, left to right | Tamagotchi Paradise contact |
 | --- | --- |
-| TX (GPIO43) | RX |
-| RX (GPIO44) | TX |
-| GND | GND |
-| 3V3 | Leave disconnected |
+| 1 · GND | 2 · Center · GND |
+| 2 · 3V3 | Leave disconnected and insulate the lead |
+| 3 · TX (GPIO43) | 3 · Right · RX |
+| 4 · RX (GPIO44) | 1 · Left · TX |
 
 Power the two devices separately. GPIO43 can carry ESP32 boot messages during startup. Finish flashing or restarting ParaLab Link before connecting the Paradise signal wires.
 
@@ -73,7 +77,7 @@ The full image contains the bootloader, partition table, firmware, asset pack, a
 
 ```sh
 python -m esptool --chip esp32s3 --port "$LINK_PORT" --baud 460800 \
-  --after watchdog_reset write_flash 0x0 dist/paralab-link-0.1.10-factory.bin
+  --after watchdog_reset write_flash 0x0 dist/paralab-link-0.1.11-factory.bin
 ```
 
 ### Update an installed device

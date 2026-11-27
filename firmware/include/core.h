@@ -23,7 +23,7 @@ bool submit(Job job, uint16_t item=0);
 void communicationBegin();
 void communicationUsbBegin();
 void communicationUsbTick();
-size_t communicationPendingRx();
+bool takeCommunicationActivity();
 void uiBegin();
 void uiTick();
 bool assetsBegin();

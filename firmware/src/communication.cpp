@@ -17,6 +17,8 @@ namespace {
 Status status;
 SemaphoreHandle_t statusLock;
 QueueHandle_t requests;
+QueueHandle_t uartEvents;
+std::atomic<bool> trafficPending{false};
 ParadiseProtocol protocol;
 ReplayCapture capture;
 BridgeArbiter arbiter;
@@ -57,12 +59,12 @@ void bridgeTick(){
             int n=0;
             if(hostSent==hostSize){
                 n=bridgeUsbRead(hostPending,sizeof(hostPending));hostSize=n>0?n:0;hostSent=0;
-                if(n>0){usbInBytes.fetch_add(n);capture.append(hostPending,n,millis());arbiter.hostInput(millis());}
+                if(n>0){usbInBytes.fetch_add(n);trafficPending.store(true);capture.append(hostPending,n,millis());arbiter.hostInput(millis());}
             }
             // Nonblocking FIFO write keeps UART RX serviced during full-duplex traffic.
             if(hostSent<hostSize){
                 n=uart_tx_chars(UART_NUM_1,(const char*)hostPending+hostSent,hostSize-hostSent);
-                if(n>0){hostSent+=n;uartTxBytes.fetch_add(n);lastTxMs.store(millis());}
+                if(n>0){hostSent+=n;uartTxBytes.fetch_add(n);lastTxMs.store(millis());trafficPending.store(true);}
             }
             capture.finish(millis());
             xSemaphoreTake(statusLock,portMAX_DELAY);status.replayBytes=capture.busy()?0:capture.size();xSemaphoreGive(statusLock);
@@ -73,11 +75,12 @@ void bridgeTick(){
             }
             if(pendingSent==pendingSize){
                 n=uart_read_bytes(UART_NUM_1,pending,sizeof(pending),0);pendingSize=n>0?n:0;pendingSent=0;
-                if(n>0){uartRxBytes.fetch_add(n);lastRxMs.store(millis());}
+                if(n>0){uartRxBytes.fetch_add(n);lastRxMs.store(millis());trafficPending.store(true);}
             }
             if(pendingSent<pendingSize){
                 auto wrote=bridgeUsbWrite(pending+pendingSent,pendingSize-pendingSent);
                 pendingSent+=wrote;usbOutBytes.fetch_add(wrote);
+                if(wrote)trafficPending.store(true);
             }
 }
 enum class Acquire { Ready, Cancelled, Busy };
@@ -138,10 +141,14 @@ void task(void*){
 }
 }
 Status statusSnapshot(){xSemaphoreTake(statusLock,portMAX_DELAY);auto copy=status;xSemaphoreGive(statusLock);return copy;}
-size_t communicationPendingRx(){
-    size_t count=0;
-    uart_get_buffered_data_len(UART_NUM_1,&count);
-    return count;
+bool takeCommunicationActivity(){
+    bool active=trafficPending.exchange(false);
+    // UART events report data even when no computer is draining the RX buffer.
+    uart_event_t event;
+    for(unsigned i=0;i<16 && xQueueReceive(uartEvents,&event,0)==pdTRUE;++i){
+        if(event.type==UART_DATA || event.type==UART_BUFFER_FULL)active=true;
+    }
+    return active;
 }
 void statusMessage(const char* message,unsigned progress){xSemaphoreTake(statusLock,portMAX_DELAY);snprintf(status.message,sizeof(status.message),"%s",message);status.progress=progress;xSemaphoreGive(statusLock);}
 void statusResult(bool success,const char* message){xSemaphoreTake(statusLock,portMAX_DELAY);status.success=success;status.busy=false;status.progress=success?100:status.progress;snprintf(status.message,sizeof(status.message),"%s",message);xSemaphoreGive(statusLock);}
@@ -162,6 +169,7 @@ bool uartSend(const uint8_t* bytes,size_t count){
     if (written<=0) return false;
     uartTxBytes.fetch_add(written);
     lastTxMs.store(millis());
+    trafficPending.store(true);
     return size_t(written)==count;
 }
 void communicationBegin(){
@@ -170,7 +178,7 @@ void communicationBegin(){
     // Mount only: never auto-format a user's received ghost partition on failure.
     status.storageOK=LittleFS.begin(false,"/userdata",5,"userdata");
     uart_config_t config{};config.baud_rate=460800;config.data_bits=UART_DATA_8_BITS;config.parity=UART_PARITY_DISABLE;config.stop_bits=UART_STOP_BITS_1;config.flow_ctrl=UART_HW_FLOWCTRL_DISABLE;config.source_clk=UART_SCLK_XTAL;
-    ESP_ERROR_CHECK(uart_driver_install(UART_NUM_1,16384,0,0,nullptr,0));ESP_ERROR_CHECK(uart_param_config(UART_NUM_1,&config));ESP_ERROR_CHECK(uart_set_pin(UART_NUM_1,pins::uartTx,pins::uartRx,UART_PIN_NO_CHANGE,UART_PIN_NO_CHANGE));
+    ESP_ERROR_CHECK(uart_driver_install(UART_NUM_1,16384,0,16,&uartEvents,0));ESP_ERROR_CHECK(uart_param_config(UART_NUM_1,&config));ESP_ERROR_CHECK(uart_set_pin(UART_NUM_1,pins::uartTx,pins::uartRx,UART_PIN_NO_CHANGE,UART_PIN_NO_CHANGE));
     statusMessage(status.assetOK?"Bridge active":"Assets missing / corrupt");
     ESP_ERROR_CHECK(xTaskCreate(task,"tama-communication",12288,nullptr,2,nullptr)==pdPASS?ESP_OK:ESP_ERR_NO_MEM);
 }

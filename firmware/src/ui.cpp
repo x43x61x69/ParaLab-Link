@@ -84,9 +84,8 @@ uint16_t* frame;
 uint8_t favorites[(catalogCount + 7) / 8]{};
 uint16_t imagePixels[32 * 32];
 bool rotated, dirty, touching, dragged, ignoreUntilRelease;
-bool screenOn;
-uint32_t lastActivityMs, lastTrafficCheck, lastTrafficBytes;
-size_t lastPendingRx;
+bool screenOn, wakeTouchGuard;
+uint32_t lastActivityMs, lastWakeContact;
 unsigned brightness;
 unsigned holdStep;
 unsigned itemLanguage = names::english;
@@ -700,18 +699,6 @@ void readTouch(const panel::Touch& sample, uint32_t now) {
     }
 }
 
-bool trafficActive(uint32_t now) {
-    const bool aboutToBlank = screenOn && uint32_t(now - lastActivityMs) >= displayIdleMs;
-    if (!aboutToBlank && uint32_t(now - lastTrafficCheck) < 100) return false;
-    lastTrafficCheck = now;
-    const uint32_t bytes = usbInBytes.load() + uartTxBytes.load() + uartRxBytes.load() + usbOutBytes.load();
-    // Paradise can send a handshake even while no computer is reading the bridge.
-    const size_t pendingRx = communicationPendingRx();
-    const bool active = bytes != lastTrafficBytes || pendingRx > lastPendingRx;
-    lastTrafficBytes = bytes;
-    lastPendingRx = pendingRx;
-    return active;
-}
 }
 
 void uiBegin() {
@@ -743,25 +730,41 @@ void uiBegin() {
 void uiTick() {
     if (!frame) return;
     const uint32_t now = millis();
+    const bool touchInterrupt = panel::takeTouchInterrupt();
     const auto sample = panel::touch(rotated);
     const bool contact = sample.event == panel::Touch::Down || sample.event == panel::Touch::Move;
     const bool released = sample.event == panel::Touch::Release && (touching || ignoreUntilRelease);
     const bool bootPressed = digitalRead(bootPin) == LOW;
-    const bool traffic = trafficActive(now);
-    if (contact || released || bootPressed || traffic) lastActivityMs = now;
+    const bool traffic = takeCommunicationActivity();
+    if (touchInterrupt || contact || released || bootPressed || traffic) lastActivityMs = now;
 
     if (!screenOn) {
-        if (contact) ignoreUntilRelease = true;
-        if (sample.event == panel::Touch::Release) ignoreUntilRelease = false;
+        if ((touchInterrupt || contact) && sample.event != panel::Touch::Release) {
+            wakeTouchGuard = true;
+            lastWakeContact = now;
+        }
+        if (sample.event == panel::Touch::Release) wakeTouchGuard = false;
         if (bootPressed) bootButton.begin(false, now);
-        if (uint32_t(now - lastActivityMs) >= displayIdleMs || !panel::setDisplayOn(true)) return;
+        if (uint32_t(now - lastActivityMs) >= displayIdleMs || !panel::setDisplayOn(true, brightness)) return;
         screenOn = true;
         dirty = true;
     } else {
-        readTouch(sample, now);
-        if (uint32_t(now - lastActivityMs) >= displayIdleMs && panel::setDisplayOn(false)) {
+        if (wakeTouchGuard) {
+            // A short tap may only leave an interrupt and no readable release report.
+            if (contact) lastWakeContact = now;
+            else if (sample.event == panel::Touch::Release || uint32_t(now - lastWakeContact) >= 120)
+                wakeTouchGuard = false;
+        }
+        if (!wakeTouchGuard) readTouch(sample, now);
+        if (uint32_t(now - lastActivityMs) >= displayIdleMs) {
+            // Keep the controller responsive and make all OLED pixels black.
+            panel::setDisplayOn(false, brightness);
+            fill({0, 0, panel::width, panel::height}, 0);
+            panel::present(frame, rotated);
             screenOn = false;
             touching = false;
+            ignoreUntilRelease = false;
+            wakeTouchGuard = false;
             holdStep = 0;
             return;
         }

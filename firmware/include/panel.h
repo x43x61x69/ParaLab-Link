@@ -11,7 +11,8 @@ struct Touch {
 };
 
 bool begin();
-bool setDisplayOn(bool on);
+bool setDisplayOn(bool on, unsigned brightness);
+bool takeTouchInterrupt();
 void setBrightness(unsigned level);
 void present(const uint16_t* pixels, bool rotated);
 void presentRows(const uint16_t* pixels, bool rotated, int top, int bottom);
