@@ -1,8 +1,18 @@
 #pragma once
 
-#define PARALAB_LINK_VERSION "0.1.11"
+#define PARALINK_VERSION "0.1.15"
+
+#ifdef PARALINK_K191
+#define PARALINK_HARDWARE "K191"
+#else
+#define PARALINK_HARDWARE "H717"
+#endif
 
 namespace product {
-constexpr char name[] = "ParaLab Link";
-constexpr char versionLabel[] = "v" PARALAB_LINK_VERSION;
+constexpr char hardware[] = PARALINK_HARDWARE;
+extern char name[20];
+extern char hardwareVersion[24];
+void begin();
+constexpr char title[] = "ParaLink";
+
 } // namespace product

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Package the standalone build and verify its flash layout."""
+"""Package the ParaLink build and verify its flash layout."""
 
 import argparse
 import csv
@@ -17,20 +17,20 @@ from tempfile import TemporaryDirectory
 
 ROOT = Path(__file__).resolve().parents[1]
 FIRMWARE = ROOT / "firmware"
-FLASH_BYTES = 16 * 1024 * 1024
+BOARDS = {"h717": (16, "ESP32-S3R8", "partitions.csv"), "k191": (8, "ESP32-S3N8", "partitions-k191.csv")}
 PARTITION_ENTRY = struct.Struct("<HBBII16sI")
 
 
 def read_version():
     header = (FIRMWARE / "include/link_version.h").read_text()
-    match = re.search(r'^#define PARALAB_LINK_VERSION "(\d+\.\d+\.\d+)"$', header, re.MULTILINE)
+    match = re.search(r'^#define PARALINK_VERSION "(\d+\.\d+\.\d+)"$', header, re.MULTILINE)
     if not match:
-        raise ValueError("Set PARALAB_LINK_VERSION in firmware/include/link_version.h")
+        raise ValueError("Set PARALINK_VERSION in firmware/include/link_version.h")
     return match.group(1)
 
 
-def read_partitions(compiled_table):
-    with (FIRMWARE / "partitions.csv").open(newline="") as file:
+def read_partitions(compiled_table, source):
+    with (FIRMWARE / source).open(newline="") as file:
         rows = csv.reader(line for line in file if not line.startswith("#"))
         expected = {row[0].strip(): (int(row[3], 0), int(row[4], 0)) for row in rows if row}
 
@@ -41,7 +41,7 @@ def read_partitions(compiled_table):
         compiled[label.rstrip(b"\0").decode("ascii")] = (offset, size)
 
     if compiled != expected:
-        raise ValueError("Built partition table differs from firmware/partitions.csv")
+        raise ValueError(f"Built partition table differs from firmware/{source}")
     return expected
 
 
@@ -49,14 +49,16 @@ def digest(data):
     return hashlib.sha256(data).hexdigest()
 
 
-def package(pio_core):
+def package(pio_core, board):
+    flash_mb, chip, partition_source = BOARDS[board]
+    flash_bytes = flash_mb * 1024 * 1024
     version = read_version()
-    build = FIRMWARE / ".pio/build/standalone"
+    build = FIRMWARE / ".pio/build" / board
     packages = pio_core / "packages"
     dist = ROOT / "dist"
     dist.mkdir(exist_ok=True)
-    stem = f"paralab-link-{version}"
-    partitions = read_partitions(build / "partitions.bin")
+    stem = f"paralink-{board}-{version}"
+    partitions = read_partitions(build / "partitions.bin", partition_source)
 
     with TemporaryDirectory(dir=dist) as staging:
         staging = Path(staging)
@@ -81,21 +83,21 @@ def package(pio_core):
         # DIO is the ROM bootstrap mode. The second-stage loader enables QIO.
         command = [
             sys.executable, str(packages / "tool-esptoolpy/esptool.py"), "--chip", "esp32s3",
-            "merge_bin", "--flash_mode", "dio", "--flash_freq", "80m", "--flash_size", "16MB",
+            "merge_bin", "--flash_mode", "dio", "--flash_freq", "80m", "--flash_size", f"{flash_mb}MB",
             "-o", str(factory),
         ]
         components = []
         for name, path, offset, limit in sources:
             data = path.read_bytes()
-            if not 0 < len(data) <= limit or offset + limit > FLASH_BYTES:
+            if not 0 < len(data) <= limit or offset + limit > flash_bytes:
                 raise ValueError(f"{name} does not fit the flash layout")
             command.extend([hex(offset), str(path)])
             components.append({"name": name, "offset": hex(offset), "bytes": len(data), "sha256": digest(data)})
 
         subprocess.run(command, check=True)
         image = factory.read_bytes()
-        if len(image) != FLASH_BYTES:
-            raise ValueError(f"Expected {FLASH_BYTES} factory bytes, got {len(image)}")
+        if len(image) != flash_bytes:
+            raise ValueError(f"Expected {flash_bytes} factory bytes, got {len(image)}")
         for part in components[1:]:
             # esptool may update the bootloader flash parameters and its hash.
             offset = int(part["offset"], 16)
@@ -104,14 +106,15 @@ def package(pio_core):
 
         manifest = {
             "version": version,
-            "chip": "ESP32-S3R8",
-            "flash_bytes": FLASH_BYTES,
+            "board": board,
+            "chip": chip,
+            "flash_bytes": flash_bytes,
             "factory_image": factory.name,
             "image_bytes": len(image),
             "sha256": digest(image),
             "components": components,
         }
-        manifest_path = staging / "manifest.json"
+        manifest_path = staging / f"manifest-{board}.json"
         manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
         app = staging / f"{stem}-app.bin"
         assets = staging / f"{stem}-assets.bin"
@@ -125,9 +128,11 @@ def package(pio_core):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pio-core", type=Path, default=os.environ.get("PLATFORMIO_CORE_DIR", Path.home() / ".platformio"))
+    parser.add_argument("--board", choices=BOARDS)
     args = parser.parse_args()
-    manifest = package(args.pio_core.expanduser())
-    print(f"{manifest['factory_image']}  {manifest['sha256']}")
+    for board in (args.board,) if args.board else BOARDS:
+        manifest = package(args.pio_core.expanduser(), board)
+        print(f"{manifest['factory_image']}  {manifest['sha256']}")
 
 
 if __name__ == "__main__":

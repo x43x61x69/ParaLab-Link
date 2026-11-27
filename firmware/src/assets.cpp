@@ -43,3 +43,10 @@ bool assetRange(const CatalogItem& item,size_t offset,uint8_t* out,size_t count)
     }
     xSemaphoreGive(lock);return ok;
 }
+
+bool assetPackMatches(size_t size, uint32_t crc) {
+    if(!mapped || size!=assetPackBytes || !statusSnapshot().assetOK)return false;
+    uint32_t stored;
+    memcpy(&stored,mapped+12,sizeof(stored));
+    return stored==crc;
+}

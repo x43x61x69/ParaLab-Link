@@ -6,6 +6,7 @@
 #include "driver/uart.h"
 #include "hal/usb_serial_jtag_ll.h"
 #include "link_version.h"
+#include "usb_update.h"
 #include <USB.h>
 #include "esp32-hal-tinyusb.h"
 #include <LittleFS.h>
@@ -23,6 +24,7 @@ ParadiseProtocol protocol;
 ReplayCapture capture;
 BridgeArbiter arbiter;
 std::atomic<bool> rebootForUpload{false};
+std::atomic<bool> requestUsbUpdate{false};
 uint8_t pending[64];size_t pendingSize=0,pendingSent=0;
 uint8_t hostPending[64];size_t hostSize=0,hostSent=0;
 
@@ -53,7 +55,6 @@ size_t bridgeUsbWrite(const uint8_t* data, size_t size) {
     return written;
 }
 
-void busy(bool value){xSemaphoreTake(statusLock,portMAX_DELAY);status.busy=value;xSemaphoreGive(statusLock);}
 void mode(Mode value){xSemaphoreTake(statusLock,portMAX_DELAY);status.mode=value;status.progress=0;xSemaphoreGive(statusLock);}
 void bridgeTick(){
             int n=0;
@@ -110,6 +111,18 @@ void task(void*){
     Request req;
     for(;;){
         if(xQueueReceive(requests,&req,0)==pdTRUE){
+            if(req.job==Job::UsbUpdate){
+                trafficPending.store(true);
+                const bool ok=updateFromUsb();
+                vTaskDelay(pdMS_TO_TICKS(ok?1200:1600));
+                if(ok)esp_restart();
+                tud_cdc_read_flush();
+                xSemaphoreTake(statusLock,portMAX_DELAY);
+                status.usbUpdate=false;
+                status.busy=false;
+                xSemaphoreGive(statusLock);
+                continue;
+            }
             const auto acquired=acquireLocal();
             if(acquired!=Acquire::Ready){
                 statusResult(false,acquired==Acquire::Cancelled?"Cancelled":"Computer busy. Try later.");
@@ -152,16 +165,28 @@ bool takeCommunicationActivity(){
 }
 void statusMessage(const char* message,unsigned progress){xSemaphoreTake(statusLock,portMAX_DELAY);snprintf(status.message,sizeof(status.message),"%s",message);status.progress=progress;xSemaphoreGive(statusLock);}
 void statusResult(bool success,const char* message){xSemaphoreTake(statusLock,portMAX_DELAY);status.success=success;status.busy=false;status.progress=success?100:status.progress;snprintf(status.message,sizeof(status.message),"%s",message);xSemaphoreGive(statusLock);}
+void statusUpdateVersion(const char* version){
+    xSemaphoreTake(statusLock,portMAX_DELAY);
+    snprintf(status.updateVersion,sizeof(status.updateVersion),"%s",version);
+    xSemaphoreGive(statusLock);
+}
 bool submit(Job job,uint16_t item){
     xSemaphoreTake(statusLock,portMAX_DELAY);
     if(status.busy){xSemaphoreGive(statusLock);return false;}
     status.busy=true;
+    status.usbUpdate=job==Job::UsbUpdate;
+    status.updateVersion[0]=0;
     status.success=false;
     status.progress=0;
     snprintf(status.message,sizeof(status.message),"%s","Starting");
     xSemaphoreGive(statusLock);
     cancelled=false;
-    Request req{job,item};if(xQueueSend(requests,&req,0)==pdTRUE)return true;busy(false);return false;
+    Request req{job,item};if(xQueueSend(requests,&req,0)==pdTRUE)return true;
+    xSemaphoreTake(statusLock,portMAX_DELAY);
+    status.usbUpdate=false;
+    status.busy=false;
+    xSemaphoreGive(statusLock);
+    return false;
 }
 bool uartSend(const uint8_t* bytes,size_t count){
     if (!count) return true;
@@ -203,12 +228,15 @@ void communicationUsbBegin() {
 
 extern "C" void tud_cdc_line_coding_cb(uint8_t interface, const cdc_line_coding_t* coding) {
     // The bridge uses a fixed UART rate. A 1200-baud USB request is for uploading.
-    if (interface == 0 && coding->bit_rate == 1200) rebootForUpload.store(true);
+    if (interface != 0) return;
+    if (coding->bit_rate == 1200) rebootForUpload.store(true);
+    if (coding->bit_rate == 2400) requestUsbUpdate.store(true);
 }
 
 void communicationUsbTick() {
+    if(requestUsbUpdate.exchange(false))submit(Job::UsbUpdate);
     if (!rebootForUpload.exchange(false) || statusSnapshot().busy) return;
-    // Give TinyUSB time to acknowledge the line-coding request before disconnecting.
-    delay(100);
+    uiPreparingUpdate();
+    delay(600);
     usb_persist_restart(RESTART_BOOTLOADER);
 }

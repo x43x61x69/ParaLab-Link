@@ -39,7 +39,7 @@ constexpr int pageButtonLeft = panel::width - rightInset - pageButtonWidth;
 constexpr int pagedContentRight = pageButtonLeft - columnGap;
 constexpr uint32_t backHoldMs = 650;
 constexpr uint32_t displayIdleMs = 30000;
-constexpr Rect versionArea{354, 0, 82, 50};
+constexpr Rect versionArea{318, 0, 118, 50};
 constexpr Rect previousPage{pageButtonLeft, bodyTop, pageButtonWidth, rowHeight};
 constexpr Rect nextPage{pageButtonLeft, bodyTop + rowHeight + rowGap, pageButtonWidth, rowHeight};
 constexpr Rect primaryAction{416, bodyTop, 112, rowHeight};
@@ -249,10 +249,10 @@ void header(const char* title, uint32_t now) {
     fill({0, 0, panel::width, headerHeight}, PANEL);
     fill({0, headerHeight - 1, panel::width, 1}, LINE);
     constexpr int titleX = 14;
-    constexpr int titleWidth = 268 - titleX;
+    constexpr int titleWidth = 239 - titleX;
     const int titleSize = textWidth(title, 3) <= titleWidth ? 3 : 2;
     text(title, titleX, 9, titleWidth, INK, titleSize);
-    center(product::versionLabel, versionArea, MUTED);
+    center(product::hardwareVersion, versionArea, MUTED);
     trafficIndicators(now);
 }
 
@@ -482,10 +482,10 @@ void render(uint32_t now) {
     fill({0, 0, panel::width, panel::height}, BG);
     switch (page.scene) {
         case Scene::Home:
-            header(product::name, now);
+            header(product::title, now);
             choices(homeChoices, true);
             text(status.assetOK ? "USB bridge" : "Asset error",
-                 238, 17, 116, status.assetOK ? ACCENT : YELLOW);
+                 208, 17, 105, status.assetOK ? ACCENT : YELLOW);
             break;
         case Scene::Gifts: header("Gifts", now); choices(giftChoices); break;
         case Scene::Worlds: header("Playdates", now); choices(worldChoices); break;
@@ -528,7 +528,7 @@ void render(uint32_t now) {
     if (pageCount > 1) {
         char position[24];
         snprintf(position, sizeof(position), "%u / %u", page.number + 1, pageCount);
-        const Rect pageLabel{271, 10, 78, 30};
+        const Rect pageLabel{240, 10, 76, 30};
         surface(pageLabel, SELECT);
         center(position, pageLabel, INK);
     }
@@ -730,6 +730,36 @@ void uiBegin() {
 void uiTick() {
     if (!frame) return;
     const uint32_t now = millis();
+    static uint32_t lastUpdatePaint;
+    static bool updateVisible;
+    const auto update = statusSnapshot();
+    if (update.usbUpdate) {
+        lastActivityMs = now;
+        if (!screenOn) screenOn = panel::setDisplayOn(true, brightness);
+        if (!updateVisible || now - lastUpdatePaint >= 90) {
+            updateVisible = true;
+            lastUpdatePaint = now;
+            fill({0, 0, panel::width, panel::height}, BG);
+            header("Firmware Update", now);
+            char version[48];
+            snprintf(version, sizeof(version), "v%s  >  %s", PARALINK_VERSION,
+                     *update.updateVersion ? update.updateVersion : "Waiting for version");
+            text(version, 20, 70, 496, CYAN, 2);
+            text(update.message, 20, 118, 496, INK, 2);
+            fill({20, 171, 414, 10}, LINE);
+            fill({20, 171, int(414 * update.progress / 100), 10}, ACCENT);
+            char percent[10];
+            snprintf(percent, sizeof(percent), "%u%%", update.progress);
+            text(percent, 448, 157, 68, ACCENT, 2);
+            panel::present(frame, rotated);
+        }
+        return;
+    }
+    if (updateVisible) {
+        updateVisible = false;
+        ignoreUntilRelease = true;
+        dirty = true;
+    }
     const bool touchInterrupt = panel::takeTouchInterrupt();
     const auto sample = panel::touch(rotated);
     const bool contact = sample.event == panel::Touch::Down || sample.event == panel::Touch::Move;
@@ -820,4 +850,14 @@ void uiTick() {
         drawPageArrow(previousPage, true, page.number > 0);
         panel::presentRows(frame, rotated, previousPage.y, previousPage.y + previousPage.h);
     }
+}
+
+void uiPreparingUpdate() {
+    if (!frame) return;
+    panel::setDisplayOn(true, brightness);
+    fill({0, 0, panel::width, panel::height}, BG);
+    header("USB update", millis());
+    text("Opening download mode", 18, 76, 500, INK, 3);
+    text("Follow the progress on your computer.", 18, 136, 500, MUTED, 2);
+    panel::present(frame, rotated);
 }

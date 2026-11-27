@@ -4,13 +4,15 @@
 #include "catalog.h"
 
 enum class Mode : uint8_t { Standalone, Bridge };
-enum class Job : uint8_t { Item, Echo, ReplayBytes };
+enum class Job : uint8_t { Item, Echo, ReplayBytes, UsbUpdate };
 struct Request { Job job; uint16_t item; };
 struct Status {
     Mode mode = Mode::Bridge;
     bool busy=false, assetOK=false, storageOK=false, success=false;
     unsigned progress=0, replayBytes=0;
     int lastItem=-1;
+    bool usbUpdate = false;
+    char updateVersion[20]{};
     char message[80]="Ready";
 };
 extern std::atomic<bool> cancelled;
@@ -26,7 +28,10 @@ void communicationUsbTick();
 bool takeCommunicationActivity();
 void uiBegin();
 void uiTick();
+void uiPreparingUpdate();
+void statusUpdateVersion(const char* version);
 bool assetsBegin();
+bool assetPackMatches(size_t size, uint32_t crc);
 bool assetRead(unsigned record, uint8_t* out, size_t capacity);
 bool assetRange(const CatalogItem& item, size_t offset, uint8_t* out, size_t count);
 bool uartSend(const uint8_t* bytes, size_t count);
